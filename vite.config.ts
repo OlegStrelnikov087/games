@@ -7,6 +7,8 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      '@tic-tac-toe': path.resolve(__dirname, './src/applications/tic-tac-toe/'),
+      '@assets': path.resolve(__dirname, "./src/assets"),
     },
   },
 });
