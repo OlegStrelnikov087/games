@@ -1,0 +1,27 @@
+import { Layout } from "../components/ layout/layout";
+import { Home } from "@/pages/home/home";
+import { NotFound } from "@/pages/not-found/not-found";
+import { createBrowserRouter } from "react-router-dom";
+import { TicTacToe } from "@/pages/tic-tac-toe/tic-tac-toe";
+import { Darts } from "@/pages/darts/darts";
+export const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    errorElement: < NotFound />,
+    children: [
+      {
+        index: true,
+        element: <Home />,
+      },
+      {
+        path: "tic-tac-toe",
+        element: <TicTacToe />
+      },
+      {
+        path: "darts",
+        element: <Darts />
+      },
+    ],
+  },
+]);
