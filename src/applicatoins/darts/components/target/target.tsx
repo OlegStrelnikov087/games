@@ -1,5 +1,3 @@
-import React from 'react';
-
 type TargetProps = {
     onHit: (points: number) => void;
 };

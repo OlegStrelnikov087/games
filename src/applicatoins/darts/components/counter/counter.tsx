@@ -2,7 +2,7 @@ import { type Player } from "../../types/types"
 interface CounterProps {
     player: Player
 }
-export const Counter = ({player}) => {
+export const Counter = ({player}: CounterProps) => {
     return (
         <div className="counter">
             <div className="name">{player.name}</div>
