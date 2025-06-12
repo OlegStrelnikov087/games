@@ -1,0 +1,12 @@
+.target-wrapper {
+    width: 100%;
+    max-width: 90vw;
+    height: min(85vh, 90vw); /* не выйдет за экран */
+    margin: 0 auto;
+  }
+
+.darts-game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
