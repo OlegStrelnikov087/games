@@ -3,7 +3,8 @@ import { Home } from "@/pages/home/home";
 import { NotFound } from "@/pages/not-found/not-found";
 import { createBrowserRouter } from "react-router-dom";
 import { TicTacToe } from "@/pages/tic-tac-toe/tic-tac-toe";
-import { Darts } from "@/pages/darts/darts";
+import SetupPage from "../pages/darts-setup/setup";
+import { Darts } from "../pages/darts-game/darts-game";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -19,9 +20,13 @@ export const router = createBrowserRouter([
         element: <TicTacToe />
       },
       {
-        path: "darts",
-        element: <Darts />
+        path: "darts-setup",
+        element: <SetupPage />
       },
+      {
+        path: "darts",
+        element: <Darts/>
+      }
     ],
   },
 ]);

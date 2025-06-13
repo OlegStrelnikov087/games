@@ -12,7 +12,7 @@ export const Home = () => {
             <GameCard
               title="Дартс"
               description="Вирутальный дартс с подсчетом очков"
-              path="/darts"
+              path="/darts-setup"
             />
           </div>
         </div>

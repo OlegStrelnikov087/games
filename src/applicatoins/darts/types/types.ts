@@ -3,3 +3,8 @@ export type Player = {
     points: number,
     winRounds: number
 }
+
+export type GameConfig = {
+    players: Player[],
+    rounds: number
+}
