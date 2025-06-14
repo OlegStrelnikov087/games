@@ -28,6 +28,8 @@ export const Darts = () => {
 
     const handleScore = async (points: number) => {
         if (!waitingForThrow) return
+        console.log(points);
+        
         setWaitingForThrow(false)
         setPlayers((prev) => {
             const newPlayers = [...prev]
@@ -76,8 +78,8 @@ export const Darts = () => {
 
     return (
         <div className='darts-game'>
-            <h1>Дартс</h1>
-            <h2>Ходит {players[currentPlayerIndex]?.name}</h2>
+            {/* <h1>Дартс</h1> */}
+            {/* <h2>Ходит {players[currentPlayerIndex]?.name}</h2> */}
             <div className="target-wrapper">
                 <Target onHit={handleScore} />
             </div>
