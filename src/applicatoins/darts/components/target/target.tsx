@@ -45,7 +45,7 @@ export const Target = ({ onHit }: TargetProps) => {
     };
 
     const sectors = numbers.map((number, i) => {
-        const start = ((i * 18 - 98) * Math.PI) / 180; 
+        const start = ((i * 18 - 98) * Math.PI) / 180;
         const end = (((i + 1) * 18 - 98) * Math.PI) / 180;
         const angleDeg = ((start + end) / 2) * (180 / Math.PI);
 
@@ -74,9 +74,9 @@ export const Target = ({ onHit }: TargetProps) => {
             style={{ display: 'block' }}
         >
             {/* Промах зона */}
-            <circle cx={center} cy={center} r={baseRadii.doubleOuter + 10} fill="#ddd" />
+            <circle cx={center} cy={center} r={baseRadii.doubleOuter + 10} fill="#ddd"/>
 
-            {sectors.map(({ number, doublePath, singleOuterPath, triplePath, singleInnerPath }, i) => (
+            {sectors.map(({ number, doublePath, singleInnerPath, singleOuterPath, triplePath }, i) => (
                 <g key={i}>
                     {/* Двойное кольцо */}
                     <path
@@ -93,8 +93,8 @@ export const Target = ({ onHit }: TargetProps) => {
                         stroke="#fff"
                         onClick={() => onHit(number)}
                         style={{ cursor: 'pointer' }}
-                    />
-                    {/* Тройное кольцо */}
+                    /> 
+                     {/* Тройное кольцо */}
                     <path
                         d={triplePath}
                         fill="#c00"
@@ -111,7 +111,7 @@ export const Target = ({ onHit }: TargetProps) => {
                         style={{ cursor: 'pointer' }}
                     />
                 </g>
-            ))}
+             ))} 
 
             {/* Bull и outer bull */}
             <circle

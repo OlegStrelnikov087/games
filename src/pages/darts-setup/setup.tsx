@@ -25,7 +25,7 @@ export default function SetupPage() {
         points, // обнулим очки для начала
         winRound: 0,
       })),
-      rounds,
+      rounds
     };
 
     navigate("/darts", { state: gameData });
