@@ -1,5 +1,7 @@
+import { ThrowTypes, type ThrowData } from "../../types/types";
+
 type TargetProps = {
-    onHit: (points: number) => void;
+    onHit: (data:ThrowData) => void;
 };
 
 const numbers = [20, 1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5];
@@ -79,7 +81,7 @@ export const Target = ({ onHit }: TargetProps) => {
                 cy={center}
                 r={baseRadii.doubleOuter + 25}
                 fill="#ddd"
-                onClick={() => onHit(0)}
+                onClick={() => onHit({points:0, throwType: ThrowTypes.MISSED })}
                 style={{ cursor: 'pointer' }}
             />
 
@@ -91,7 +93,7 @@ export const Target = ({ onHit }: TargetProps) => {
                         d={doublePath}
                         fill="#0c0"
                         stroke="#fff"
-                        onClick={() => onHit(number * 2)}
+                        onClick={() => onHit({points:number*2, throwType: ThrowTypes.DOUBLED })}
                         style={{ cursor: 'pointer' }}
                     />
                     {/* Обычное внешнее кольцо */}
@@ -99,7 +101,7 @@ export const Target = ({ onHit }: TargetProps) => {
                         d={singleOuterPath}
                         fill={i % 2 === 0 ? '#222' : '#aaa'}
                         stroke="#fff"
-                        onClick={() => onHit(number)}
+                        onClick={() => onHit({points:number, throwType: ThrowTypes.STANDARTED })}
                         style={{ cursor: 'pointer' }}
                     />
                     {/* Тройное кольцо */}
@@ -107,7 +109,7 @@ export const Target = ({ onHit }: TargetProps) => {
                         d={triplePath}
                         fill="#c00"
                         stroke="#fff"
-                        onClick={() => onHit(number * 3)}
+                        onClick={() => onHit({points:number*3, throwType: ThrowTypes.TRIPLED })}
                         style={{ cursor: 'pointer' }}
                     />
                     {/* Обычное внутреннее кольцо */}
@@ -115,7 +117,7 @@ export const Target = ({ onHit }: TargetProps) => {
                         d={singleInnerPath}
                         fill={i % 2 === 0 ? '#222' : '#aaa'}
                         stroke="#fff"
-                        onClick={() => onHit(number)}
+                        onClick={() => onHit({points:number, throwType: ThrowTypes.STANDARTED })}
                         style={{ cursor: 'pointer' }}
                     />
                 </g>
@@ -128,7 +130,7 @@ export const Target = ({ onHit }: TargetProps) => {
                 r={baseRadii.bullOuter}
                 fill="green"
                 stroke="#fff"
-                onClick={() => onHit(25)}
+                onClick={() => onHit({points:25, throwType: ThrowTypes.GREEN_BULL })}
                 style={{ cursor: 'pointer' }}
             />
             <circle
@@ -137,7 +139,7 @@ export const Target = ({ onHit }: TargetProps) => {
                 r={baseRadii.bullInner}
                 fill="red"
                 stroke="#fff"
-                onClick={() => onHit(50)}
+                onClick={() => onHit({points:50, throwType: ThrowTypes.RED_BULL })}
                 style={{ cursor: 'pointer' }}
             />
 

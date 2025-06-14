@@ -1,9 +1,10 @@
 import './darts-game.css'
 import { Target } from "../../applicatoins/darts/components/target/target";
 import { useLocation, Navigate } from "react-router-dom";
-import type { GameConfig, Player } from '../../applicatoins/darts/types/types';
+import type { GameConfig, Player, ThrowData } from '../../applicatoins/darts/types/types';
 import { Counter } from '../../applicatoins/darts/components/counter/counter';
 import { useEffect, useState } from 'react';
+import { getPlayersAfterThrow, getPlayersAfterWinRound, isGameOver, isNextPlayerThrow, playerIsOverdonePoints, playerWinRounds } from '../../applicatoins/darts/game-logic/game-logic';
 
 export const Darts = () => {
     const location = useLocation();
@@ -13,53 +14,50 @@ export const Darts = () => {
     const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
     const [currentThrow, setCurrentThrow] = useState(0);
     const [waitingForThrow, setWaitingForThrow] = useState(false);
+    const [startPoints, setStartPoints] = useState(0)
     useEffect(() => {
         if (gameData) {
             setPlayers(
                 gameData.players.map((p) => ({
                     ...p,
-                    points: gameData.players[0].points || 501,
+                    points: gameData.startPoints || 501,
                     winRound: 0,
                 }))
             );
             setRounds(gameData.rounds);
+            setStartPoints(gameData.startPoints)
         }
     }, [gameData]);
 
-    const handleScore = async (points: number) => {
+    const handleScore = async (throwData: ThrowData) => {
         if (!waitingForThrow) return
-        console.log(points);
-        
         setWaitingForThrow(false)
         setPlayers((prev) => {
-            const newPlayers = [...prev]
-            const currentPlayer = newPlayers[currentPlayerIndex]
-            currentPlayer.points = currentPlayer.points - points
-            return newPlayers
+            if (playerIsOverdonePoints(prev, currentPlayerIndex, throwData)) {
+                const nextPlayer = (currentPlayerIndex + 1) % players.length;
+                setCurrentPlayerIndex(nextPlayer);
+                setCurrentThrow(0);
+            }
+            return getPlayersAfterThrow(throwData.points, prev, currentPlayerIndex)
         })
         const nextThrow = currentThrow + 1
         setCurrentThrow(nextThrow)
         const player = players[currentPlayerIndex]
         // Победа в раунде
-        if (player.points - points === 0) {
+        if (playerWinRounds(player, throwData.points, throwData.throwType)) {
             setPlayers((prev) => {
-                const updated = [...prev];
-                updated[currentPlayerIndex].winRounds += 1;
-                updated[currentPlayerIndex].points = gameData?.players[0].points || 501;
-                return updated;
+                return getPlayersAfterWinRound(prev, currentPlayerIndex, startPoints)
             });
         }
-        if (player.points - points === 0 || nextThrow === 3) {
+        if (isNextPlayerThrow(playerWinRounds(player, throwData.points, throwData.throwType), nextThrow)) {
             // следующий игрок
             const nextPlayer = (currentPlayerIndex + 1) % players.length;
             setCurrentPlayerIndex(nextPlayer);
             setCurrentThrow(0);
         }
         // проверка конца игры
-        const gameEnded = players.some(
-            (p) => p.winRounds >= rounds
-        );
-        if (!gameEnded) {
+
+        if (!isGameOver(players, rounds)) {
             // Ждём следующего броска
             setTimeout(() => setWaitingForThrow(true), 300);
         }
