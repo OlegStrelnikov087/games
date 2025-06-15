@@ -1,6 +1,6 @@
 import './darts-game.css'
 import { Target } from "../../applications/darts/components/target/target";
-import { useLocation, Navigate } from "react-router-dom";
+import { useLocation, Navigate, Link } from "react-router-dom";
 import type { GameConfig, Player, ThrowData } from '../../applications/darts/types/types';
 import { Counter } from '../../applications/darts/components/counter/counter';
 import { useEffect, useState } from 'react';
@@ -18,6 +18,7 @@ export const Darts = () => {
     const [startPoints, setStartPoints] = useState(0);
     const [showModal, setShowModal] = useState(true);
     const [modalMessage, setModalMessage] = useState<string>('Начинаем!')
+    const [gameIsContinue, setGameIsContinue] = useState<boolean>(true)
     useEffect(() => {
         if (gameData) {
             setPlayers(
@@ -50,13 +51,14 @@ export const Darts = () => {
         if (isPlayerWinRounds(player, throwData.points, throwData.throwType)) {
 
             setPlayers((prev) => {
-                return getPlayersAfterWinRound(prev, currentPlayerIndex, startPoints)
+                return getPlayersAfterWinRound(prev, startPoints)
             });
 
             player.winRounds++
 
             if (isPlayerWinGame(player, rounds)) {
-                setModalMessage(`${player.name} выйграл игру!`)
+                // setModalMessage(`${player.name} выйграл игру!`)
+                setGameIsContinue(false)
             } else {
                 setCurrentThrow(1)
                 setModalMessage(`${player.name} выйграл лег!`)
@@ -89,6 +91,7 @@ export const Darts = () => {
             }, 300);
         } else {
             console.log('game is over!!!'); 
+            
         }
 
     }
@@ -105,7 +108,14 @@ export const Darts = () => {
 
     return (
         <div className='darts-game'>
-            {showModal && (
+            {!gameIsContinue && (
+                <div className="goToSetupModal">
+                    <p>game is over</p>
+                    <button><Link to={'/darts'}>Сыграть еще раз</Link></button>
+                    <button><Link to={'/darts-setup'}>К настройкам</Link></button>
+                </div>
+            )}
+            {showModal && gameIsContinue &&(
                 <DartsModal player={players[currentPlayerIndex]} message={modalMessage} onStart={handleStartThrow} />
             )}
             <div className="target-wrapper">

@@ -9,9 +9,8 @@ export const getPlayersAfterThrow = (points: number, prevPlayers: Player[], curr
     return newPlayers
 }
 
-export const getPlayersAfterWinRound = (prevPlayers: Player[], currentPlayerIndex: number, startPoins: number): Player[] => {
+export const getPlayersAfterWinRound = (prevPlayers: Player[], startPoins: number): Player[] => {
     const updated = [...prevPlayers];
-    // updated[currentPlayerIndex].winRounds += 1;
     updated.forEach(player => {
         player.points = startPoins
     })
