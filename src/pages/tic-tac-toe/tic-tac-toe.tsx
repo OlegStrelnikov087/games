@@ -1,4 +1,4 @@
-import { Board } from "../../applicatoins/tic-tac-toe/components/border/board"
+import { Board } from "../../applications/tic-tac-toe/components/border/board"
 import './tic-tac-toe.css'
 export const TicTacToe = () => {
     return (

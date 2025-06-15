@@ -1,10 +1,11 @@
 import './darts-game.css'
-import { Target } from "../../applicatoins/darts/components/target/target";
+import { Target } from "../../applications/darts/components/target/target";
 import { useLocation, Navigate } from "react-router-dom";
-import type { GameConfig, Player, ThrowData } from '../../applicatoins/darts/types/types';
-import { Counter } from '../../applicatoins/darts/components/counter/counter';
+import type { GameConfig, Player, ThrowData } from '../../applications/darts/types/types';
+import { Counter } from '../../applications/darts/components/counter/counter';
 import { useEffect, useState } from 'react';
-import { getPlayersAfterThrow, getPlayersAfterWinRound, isGameOver, isNextPlayerThrow, playerIsOverdonePoints, playerWinRounds } from '../../applicatoins/darts/game-logic/game-logic';
+import { getPlayersAfterThrow, getPlayersAfterWinRound, isGameOver, isNextPlayerThrow, playerIsOverdonePoints, playerWinRounds } from '../../applications/darts/game-logic/game-logic';
+import { DartsModal } from '../../applications/darts/components/modal/modal';
 
 export const Darts = () => {
     const location = useLocation();
@@ -15,6 +16,7 @@ export const Darts = () => {
     const [currentThrow, setCurrentThrow] = useState(0);
     const [waitingForThrow, setWaitingForThrow] = useState(false);
     const [startPoints, setStartPoints] = useState(0)
+    const [showModal, setShowModal] = useState(true);
     useEffect(() => {
         if (gameData) {
             setPlayers(
@@ -29,6 +31,9 @@ export const Darts = () => {
         }
     }, [gameData]);
 
+    const handleStartThrow = () => {
+        setShowModal(false)
+    }
     const handleScore = async (throwData: ThrowData) => {
         if (!waitingForThrow) return
         setWaitingForThrow(false)
@@ -37,6 +42,7 @@ export const Darts = () => {
                 const nextPlayer = (currentPlayerIndex + 1) % players.length;
                 setCurrentPlayerIndex(nextPlayer);
                 setCurrentThrow(0);
+                setShowModal(true)
             }
             return getPlayersAfterThrow(throwData.points, prev, currentPlayerIndex)
         })
@@ -54,12 +60,15 @@ export const Darts = () => {
             const nextPlayer = (currentPlayerIndex + 1) % players.length;
             setCurrentPlayerIndex(nextPlayer);
             setCurrentThrow(0);
+            setShowModal(true)
         }
         // проверка конца игры
 
         if (!isGameOver(players, rounds)) {
             // Ждём следующего броска
-            setTimeout(() => setWaitingForThrow(true), 300);
+            setTimeout(() => {
+                setWaitingForThrow(true)
+            }, 300);
         }
     }
 
@@ -69,15 +78,15 @@ export const Darts = () => {
         }
     }, [players]);
 
-
     if (!gameData || gameData.players.length < 2) {
         return <Navigate to="/darts-setup" />;
     }
 
     return (
         <div className='darts-game'>
-            {/* <h1>Дартс</h1> */}
-            {/* <h2>Ходит {players[currentPlayerIndex]?.name}</h2> */}
+            {showModal && (
+                <DartsModal player={players[currentPlayerIndex]} message={'сообщение'} onStart={handleStartThrow} />
+            )}
             <div className="target-wrapper">
                 <Target onHit={handleScore} />
             </div>

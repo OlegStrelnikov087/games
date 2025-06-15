@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { Player, GameConfig } from "../../applicatoins/darts/types/types";
+import type { Player, GameConfig } from "../../applications/darts/types/types";
 // import { Link } from "react-router-dom";
 export default function SetupPage() {
   const [playerName, setPlayerName] = useState("");
