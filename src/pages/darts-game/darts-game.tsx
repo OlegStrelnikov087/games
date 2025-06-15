@@ -4,7 +4,7 @@ import { useLocation, Navigate } from "react-router-dom";
 import type { GameConfig, Player, ThrowData } from '../../applications/darts/types/types';
 import { Counter } from '../../applications/darts/components/counter/counter';
 import { useEffect, useState } from 'react';
-import { getPlayersAfterThrow, getPlayersAfterWinRound, isGameOver, playerIsOverdonePoints, isPlayerWinRounds, isPlayerDidAllThrows } from '../../applications/darts/utils/game-logic';
+import { getPlayersAfterThrow, getPlayersAfterWinRound, isPlayerWinGame, playerIsOverdonePoints, isPlayerWinRounds, isPlayerDidAllThrows } from '../../applications/darts/utils/game-logic';
 import { DartsModal } from '../../applications/darts/components/modal/modal';
 import { MINIMAL_PLAYERS_COUNT } from '../../applications/darts/utils/game-const';
 export const Darts = () => {
@@ -48,16 +48,32 @@ export const Darts = () => {
         const player = players[currentPlayerIndex]
 
         if (isPlayerWinRounds(player, throwData.points, throwData.throwType)) {
-            console.log('WIN ROUND!');
-            setCurrentThrow(1)
-            setModalMessage(`${player.name} выйграл лег!`)
+
             setPlayers((prev) => {
                 return getPlayersAfterWinRound(prev, currentPlayerIndex, startPoints)
             });
+
+            player.winRounds++
+
+            if (isPlayerWinGame(player, rounds)) {
+                setModalMessage(`${player.name} выйграл игру!`)
+            } else {
+                setCurrentThrow(1)
+                setModalMessage(`${player.name} выйграл лег!`)
+            }
             setShowModal(true)
         }
+
         else if (playerIsOverdonePoints(player, throwData.points)) {
             setModalMessage(`${player.name} перебрал очков`)
+            const nextPlayer = (currentPlayerIndex + 1) % players.length;
+            setCurrentPlayerIndex(nextPlayer);
+            setCurrentThrow(1);
+            setShowModal(true)
+        }
+
+        else if (isPlayerDidAllThrows(currentThrow)) {
+            setModalMessage(`${player.name} сходил 3 раза`)
             const nextPlayer = (currentPlayerIndex + 1) % players.length;
             setCurrentPlayerIndex(nextPlayer);
             setCurrentThrow(1);
@@ -65,21 +81,16 @@ export const Darts = () => {
         } else {
             setCurrentThrow(prev => prev + 1)
         }
-
-        if (isPlayerDidAllThrows(currentThrow)) {
-            setModalMessage(`${player.name} сходил 3 раза`)
-            const nextPlayer = (currentPlayerIndex + 1) % players.length;
-            setCurrentPlayerIndex(nextPlayer);
-            setCurrentThrow(1);
-            setShowModal(true)
-        }
-        // проверка конца игры
-        if (!isGameOver(players, rounds)) {
+        // проверка конца игры. Позже добавить выход с помощью кнопки 'завершить игру', пока только проверка на победу
+        if (!(players.some(player => player.winRounds === rounds))) {
             // Ждём следующего броска
             setTimeout(() => {
                 setWaitingForThrow(true)
             }, 300);
+        } else {
+            console.log('game is over!!!'); 
         }
+
     }
 
     useEffect(() => {
