@@ -4,9 +4,9 @@ import { useLocation, Navigate } from "react-router-dom";
 import type { GameConfig, Player, ThrowData } from '../../applications/darts/types/types';
 import { Counter } from '../../applications/darts/components/counter/counter';
 import { useEffect, useState } from 'react';
-import { getPlayersAfterThrow, getPlayersAfterWinRound, isGameOver, isNextPlayerThrow, playerIsOverdonePoints, playerWinRounds } from '../../applications/darts/game-logic/game-logic';
+import { getPlayersAfterThrow, getPlayersAfterWinRound, isGameOver, isNextPlayerThrow, playerIsOverdonePoints, playerWinRounds } from '../../applications/darts/utils/game-logic';
 import { DartsModal } from '../../applications/darts/components/modal/modal';
-
+import { MINIMAL_PLAYERS_COUNT } from '../../applications/darts/utils/game-const';
 export const Darts = () => {
     const location = useLocation();
     const gameData = location.state as GameConfig | null;
@@ -73,12 +73,12 @@ export const Darts = () => {
     }
 
     useEffect(() => {
-        if (players.length >= 2) {
+        if (players.length >= MINIMAL_PLAYERS_COUNT) {
             setWaitingForThrow(true); // запускаем первый бросок
         }
     }, [players]);
 
-    if (!gameData || gameData.players.length < 2) {
+    if (!gameData || gameData.players.length < MINIMAL_PLAYERS_COUNT) {
         return <Navigate to="/darts-setup" />;
     }
 
