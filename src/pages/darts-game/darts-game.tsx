@@ -5,8 +5,9 @@ import type { GameConfig, Player, ThrowData } from '../../applications/darts/typ
 import { Counter } from '../../applications/darts/components/counter/counter';
 import { useEffect, useState } from 'react';
 import { getPlayersAfterThrow, getPlayersAfterWinRound, isPlayerWinGame, playerIsOverdonePoints, isPlayerWinRounds, isPlayerDidAllThrows } from '../../applications/darts/utils/game-logic';
-import { DartsModal } from '../../applications/darts/components/modal/modal';
+import { DartsModal } from '../../applications/darts/components/throw-modal/modal';
 import { MINIMAL_PLAYERS_COUNT } from '../../applications/darts/utils/game-const';
+import { GameOverModal } from '../../applications/darts/components/game-over-modal/modal';
 export const Darts = () => {
     const location = useLocation();
     const gameData = location.state as GameConfig | null;
@@ -108,11 +109,7 @@ export const Darts = () => {
             setTimeout(() => {
                 setWaitingForThrow(true)
             }, 300);
-        } else {
-            console.log('game is over!!!');
-
         }
-
     }
 
     useEffect(() => {
@@ -128,12 +125,7 @@ export const Darts = () => {
     return (
         <div className='darts-game'>
             {!gameIsContinue && (
-                <div className="goToSetupModal">
-                    <p>game is over</p>
-                    <button onClick={handleRestartGame}>Сыграть еще раз</button>
-                    <button><Link to={'/'}>Выйти из Дартс</Link></button>
-                    <button><Link to={'/darts-setup'}>К настройкам</Link></button>
-                </div>
+                <GameOverModal handleRestartGame={handleRestartGame} />
             )}
             {showModal && gameIsContinue && (
                 <DartsModal player={players[currentPlayerIndex]} message={modalMessage} onStart={handleStartThrow} />
