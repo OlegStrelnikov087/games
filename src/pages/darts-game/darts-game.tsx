@@ -37,6 +37,25 @@ export const Darts = () => {
         setShowModal(false)
     }
 
+    const handleRestartGame = () => {
+        if (!gameData) return
+        setPlayers(
+            gameData.players.map((p) => ({
+                ...p,
+                points: gameData.startPoints || 501,
+                winRound: 0,
+            }))
+        );
+        setRounds(gameData.rounds);
+        setStartPoints(gameData.startPoints)
+        setCurrentPlayerIndex(0)
+        setCurrentThrow(1)
+        setWaitingForThrow(false)
+        setModalMessage('Начинаем!')
+        setShowModal(true)
+        setGameIsContinue(true)
+    }
+
     const handleScore = async (throwData: ThrowData) => {
         if (!waitingForThrow) return
         setWaitingForThrow(false)
@@ -90,8 +109,8 @@ export const Darts = () => {
                 setWaitingForThrow(true)
             }, 300);
         } else {
-            console.log('game is over!!!'); 
-            
+            console.log('game is over!!!');
+
         }
 
     }
@@ -111,11 +130,12 @@ export const Darts = () => {
             {!gameIsContinue && (
                 <div className="goToSetupModal">
                     <p>game is over</p>
-                    <button><Link to={'/darts'}>Сыграть еще раз</Link></button>
+                    <button onClick={handleRestartGame}>Сыграть еще раз</button>
+                    <button><Link to={'/'}>Выйти из Дартс</Link></button>
                     <button><Link to={'/darts-setup'}>К настройкам</Link></button>
                 </div>
             )}
-            {showModal && gameIsContinue &&(
+            {showModal && gameIsContinue && (
                 <DartsModal player={players[currentPlayerIndex]} message={modalMessage} onStart={handleStartThrow} />
             )}
             <div className="target-wrapper">
