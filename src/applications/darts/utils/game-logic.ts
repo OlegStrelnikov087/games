@@ -18,7 +18,7 @@ export const getPlayersAfterWinRound = (prevPlayers: Player[], startPoins: numbe
 }
 
 export const playerIsOverdonePoints = (player: Player, throwPoints: number): boolean => {
-    return player.points - throwPoints < 2 
+    return player.points - throwPoints < 2
 }
 
 export const isPlayerWinRounds = (player: Player, points: number, throwType: ThrowTypes): boolean => {
@@ -26,12 +26,30 @@ export const isPlayerWinRounds = (player: Player, points: number, throwType: Thr
 }
 
 export const isPlayerDidAllThrows = (throwCount: number): boolean => {
-    return throwCount===MAXIMUM_THROW_COUNT
+    return throwCount === MAXIMUM_THROW_COUNT
 }
 
 export const isPlayerWinGame = (player: Player, roundsCount: number): boolean => {
     return player.winRounds === roundsCount
 }
-// export const isPlayerWinGame = (players: Player[], rounds: number): boolean => {
-//     return players.some(player => player.winRounds === rounds)
-// }
+
+export const getWinGameMessage = (name: string): string => {
+    return `Игрок ${name} одержал победу!`
+}
+
+export const getWinRoundMessage = (name: string): string => {
+    return `Игрок ${name} выиграл лег!`
+}
+
+export const getOverloadPointsMessage = (name: string): string => {
+    return `Игрок ${name} перебрал очков`
+}
+
+export const getDidAllThrowsMessage = (name: string): string => {
+    return `Игрок ${name} сходил`
+} 
+
+export const getStartGameMessage = (name: string): string => {
+    return `Начинает игрок ${name}`
+}
+

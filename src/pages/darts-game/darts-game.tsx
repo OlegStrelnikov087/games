@@ -1,10 +1,10 @@
 import './darts-game.css'
 import { Target } from "../../applications/darts/components/target/target";
-import { useLocation, Navigate, Link } from "react-router-dom";
+import { useLocation, Navigate } from "react-router-dom";
 import type { GameConfig, Player, ThrowData } from '../../applications/darts/types/types';
 import { Counter } from '../../applications/darts/components/counter/counter';
 import { useEffect, useState } from 'react';
-import { getPlayersAfterThrow, getPlayersAfterWinRound, isPlayerWinGame, playerIsOverdonePoints, isPlayerWinRounds, isPlayerDidAllThrows } from '../../applications/darts/utils/game-logic';
+import { getPlayersAfterThrow, getPlayersAfterWinRound, isPlayerWinGame, playerIsOverdonePoints, isPlayerWinRounds, isPlayerDidAllThrows, getStartGameMessage, getWinGameMessage, getWinRoundMessage, getOverloadPointsMessage, getDidAllThrowsMessage } from '../../applications/darts/utils/game-logic';
 import { DartsModal } from '../../applications/darts/components/throw-modal/modal';
 import { MINIMAL_PLAYERS_COUNT } from '../../applications/darts/utils/game-const';
 import { GameOverModal } from '../../applications/darts/components/game-over-modal/modal';
@@ -18,7 +18,7 @@ export const Darts = () => {
     const [waitingForThrow, setWaitingForThrow] = useState(false);
     const [startPoints, setStartPoints] = useState(0);
     const [showModal, setShowModal] = useState(true);
-    const [modalMessage, setModalMessage] = useState<string>('Начинаем!')
+    const [modalMessage, setModalMessage] = useState<string>(getStartGameMessage(gameData?.players[0]?.name) || '')
     const [gameIsContinue, setGameIsContinue] = useState<boolean>(true)
     useEffect(() => {
         if (gameData) {
@@ -52,7 +52,7 @@ export const Darts = () => {
         setCurrentPlayerIndex(0)
         setCurrentThrow(1)
         setWaitingForThrow(false)
-        setModalMessage('Начинаем!')
+        setModalMessage(getStartGameMessage(players[currentPlayerIndex].name))
         setShowModal(true)
         setGameIsContinue(true)
     }
@@ -77,17 +77,17 @@ export const Darts = () => {
             player.winRounds++
 
             if (isPlayerWinGame(player, rounds)) {
-                // setModalMessage(`${player.name} выйграл игру!`)
+                setModalMessage(getWinGameMessage(player.name))
                 setGameIsContinue(false)
             } else {
                 setCurrentThrow(1)
-                setModalMessage(`${player.name} выйграл лег!`)
+                setModalMessage(getWinRoundMessage(player.name))
+                setShowModal(true)
             }
-            setShowModal(true)
         }
 
         else if (playerIsOverdonePoints(player, throwData.points)) {
-            setModalMessage(`${player.name} перебрал очков`)
+            setModalMessage(getOverloadPointsMessage(player.name))
             const nextPlayer = (currentPlayerIndex + 1) % players.length;
             setCurrentPlayerIndex(nextPlayer);
             setCurrentThrow(1);
@@ -95,7 +95,7 @@ export const Darts = () => {
         }
 
         else if (isPlayerDidAllThrows(currentThrow)) {
-            setModalMessage(`${player.name} сходил 3 раза`)
+            setModalMessage(getDidAllThrowsMessage(player.name))
             const nextPlayer = (currentPlayerIndex + 1) % players.length;
             setCurrentPlayerIndex(nextPlayer);
             setCurrentThrow(1);
