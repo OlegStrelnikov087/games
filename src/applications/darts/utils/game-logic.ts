@@ -18,16 +18,19 @@ export const getPlayersAfterWinRound = (prevPlayers: Player[], currentPlayerInde
     return updated;
 }
 
-export const playerIsOverdonePoints = (prevPlayers: Player[], currentPlayerIndex: number, throwData: ThrowData): boolean => {
-    return prevPlayers[currentPlayerIndex].points - throwData.points <= 1
+export const playerIsOverdonePoints = (player: Player, throwPoints: number): boolean => {
+    return player.points - throwPoints < 2 
 }
 
-export const playerWinRounds = (player: Player, points: number, throwType: ThrowTypes): boolean => {
+export const isPlayerWinRounds = (player: Player, points: number, throwType: ThrowTypes): boolean => {
     return player.points - points === 0 && throwType === ThrowTypes.DOUBLED
 }
 
-export const isNextPlayerThrow = (playerWinRounds: boolean, nextThrow: number): boolean => {
-    return playerWinRounds || nextThrow === MAXIMUM_THROW_COUNT
+// export const isNextPlayerThrow = (playerWinRounds: boolean, nextThrow: number): boolean => {
+//     return playerWinRounds || nextThrow === MAXIMUM_THROW_COUNT
+// }
+export const isPlayerDidAllThrows = (throwCount: number): boolean => {
+    return throwCount===MAXIMUM_THROW_COUNT
 }
 
 export const isGameOver = (players: Player[], rounds: number): boolean => {
