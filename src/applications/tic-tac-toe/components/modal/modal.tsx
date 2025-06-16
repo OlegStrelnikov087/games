@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import './modal.css';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * Пропсы для компонента Modal.
@@ -27,11 +28,15 @@ export const Modal: React.FC<ModalProps> = ({
   playAgainButtonText,
   onClose,
 }) => {
+  const navigate = useNavigate()
   return (
     <div className="modal-overlay">
       <div className="modal">
         {content}
-        <button onClick={onClose}>{playAgainButtonText}</button>
+        <div className="modal-actions">
+          <button onClick={onClose}>{playAgainButtonText}</button>
+          <button onClick={() => navigate('/')}>Выйти из крестики-нолики</button>
+        </div>
       </div>
     </div>
   );
