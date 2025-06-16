@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Player, GameConfig } from "../../applications/darts/types/types";
 import { MINIMAL_PLAYERS_COUNT } from "../../applications/darts/utils/game-const";
+import './setup.css'
 export default function SetupPage() {
   const [playerName, setPlayerName] = useState("");
   const [players, setPlayers] = useState<Player[]>([]);
@@ -33,11 +34,11 @@ export default function SetupPage() {
 
   const saveEditPlayer = () => {
     if (editingIndex === null || !editName.trim()) return;
-    
-    setPlayers(players.map((player, index) => 
+
+    setPlayers(players.map((player, index) =>
       index === editingIndex ? { ...player, name: editName } : player
     ));
-    
+
     setEditingIndex(null);
     setEditName("");
   };
@@ -79,31 +80,33 @@ export default function SetupPage() {
         </button>
       </div>
 
-      <ul className="players-list">
+      <div className="players-list">
         {players.map((p, i) => (
-          <li key={i}>
+          <div className='player-card' key={i}>
             {editingIndex === i ? (
-              <div className="edit-player-form">
+              <div className="edit-player-block">
                 <input
                   type="text"
                   value={editName}
                   onChange={e => setEditName(e.target.value)}
                 />
-                <button onClick={saveEditPlayer}>Сохранить</button>
-                <button onClick={cancelEdit}>Отмена</button>
+                <div className="edit-player-antions">
+                  <button onClick={saveEditPlayer}>Сохранить</button>
+                  <button onClick={cancelEdit}>Отмена</button>
+                </div>
               </div>
             ) : (
               <div className="player-item">
                 <span>{p.name}</span>
-                <div className="player-actions">
+                <div className="player-item-actions">
                   <button onClick={() => startEditPlayer(i)}>Изменить</button>
                   <button onClick={() => handleDeletePlayer(i)}>Удалить</button>
                 </div>
               </div>
             )}
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
 
       <div className="game-settings">
         <label>Раунды:</label>
@@ -122,8 +125,8 @@ export default function SetupPage() {
         </select>
       </div>
 
-      <button 
-        onClick={handleStartGame} 
+      <button
+        onClick={handleStartGame}
         disabled={players.length < MINIMAL_PLAYERS_COUNT}
         className="start-game-button"
       >
