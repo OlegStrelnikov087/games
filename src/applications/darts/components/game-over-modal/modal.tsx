@@ -12,11 +12,11 @@ export const GameOverModal = ({ handleRestartGame }: GameOverModal) => {
                 <h2>Выберите дальнейшее дествие</h2>
                 <div className="game-over-modal-actions">
                     <button className='modal-actions-btn restart-game' onClick={handleRestartGame}>Сыграть еще раз</button>
-                    <button className='modal-actions-btn exit-game' onClick={() => navigate('/')}>
-                        Выйти из Дартс
-                    </button>
                     <button className='modal-actions-btn go-to-setup' onClick={() => navigate('/darts-setup')}>
                         К настройкам
+                    </button>
+                    <button className='modal-actions-btn exit-game' onClick={() => navigate('/')}>
+                        Выйти из Дартс
                     </button>
                 </div>
             </div>
