@@ -1,8 +1,8 @@
 import { Layout } from "../components/ layout/layout";
-import { Home } from "@/pages/home/home";
-import { NotFound } from "@/pages/not-found/not-found";
+import { Home } from "../pages/home/home";
+import { NotFound } from "../pages/not-found/not-found";
 import { createBrowserRouter } from "react-router-dom";
-import { TicTacToe } from "@/pages/tic-tac-toe/tic-tac-toe";
+import { TicTacToe } from "../pages/tic-tac-toe/tic-tac-toe";
 import SetupPage from "../pages/darts-setup/setup";
 import { Darts } from "../pages/darts-game/darts-game";
 export const router = createBrowserRouter([

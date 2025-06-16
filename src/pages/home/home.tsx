@@ -1,4 +1,4 @@
-import {GameCard} from "@/components/game-card/game-card";
+import { GameCard } from "../../components/game-card/game-card";
 export const Home = () => {
     return (
         <div >

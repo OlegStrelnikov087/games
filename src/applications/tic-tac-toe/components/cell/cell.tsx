@@ -1,8 +1,8 @@
 import { type BoardValue, GameFigure } from '../../types/types';
 import Lottie from 'lottie-react';
 import './cell.css';
-import crossAnimation from '@assets/cross.json';
-import ovalAnimation from '@assets/oval.json';
+import crossAnimation from '../../../../assets/cross.json'
+import ovalAnimation from '../../../../assets/oval.json'
 
 /**
  * Словарь, отображающий фигуры (`X`, `O`) в соответствующие анимации Lottie.

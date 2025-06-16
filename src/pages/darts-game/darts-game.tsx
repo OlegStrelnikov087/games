@@ -18,7 +18,7 @@ export const Darts = () => {
     const [waitingForThrow, setWaitingForThrow] = useState(false);
     const [startPoints, setStartPoints] = useState(0);
     const [showModal, setShowModal] = useState(true);
-    const [modalMessage, setModalMessage] = useState<string>(getStartGameMessage(gameData?.players[0]?.name) || '')
+    const [modalMessage, setModalMessage] = useState<string>(getStartGameMessage(gameData?.players[0]?.name ?? ''))
     const [gameIsContinue, setGameIsContinue] = useState<boolean>(true)
     useEffect(() => {
         if (gameData) {

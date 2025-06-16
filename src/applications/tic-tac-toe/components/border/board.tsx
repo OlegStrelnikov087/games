@@ -1,26 +1,12 @@
-// import { isGameOver } from '@tic-tac-toe/utils/game-logic';
-// import { Cell } from '@tic-tac-toe/components/cell/cell';
-// import { Modal } from '@tic-tac-toe/components/modal/modal';
-// import { BoardValue, GameNotFinished, GameResult, GameRole } from '@tic-tac-toe/types/types';
-// import React, { useState } from 'react';
-// import '@tic-tac-toe/components/board/board.css';
-// import Lottie from 'lottie-react';
-// import gridAnimation from '@assets/grid.json';
-// import {
-//   BOARD_INITIAL_STATE,
-//   BOT_MOVE_TIME,
-//   EMPTY_CELL_VALUE,
-//   INITIAL_GAME
-// } from '@tic-tac-toe/utils/game-const';
-// import { botMove, getResultGameMessage } from '@tic-tac-toe/utils/game-logic';
 import { isGameOver } from '../../utils/game-logic';
 import { Cell } from '../cell/cell';
 import { Modal } from '../modal/modal';
 import { type BoardValue, GameNotFinished, type GameResult, GameRole } from '../../types/types';
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import './board.css';
 import Lottie from 'lottie-react';
-import gridAnimation from '@assets/grid.json';
+// import gridAnimation from '@assets/grid.json';
+import gridAnimation from '../../../../assets/grid.json';
 import {
   BOARD_INITIAL_STATE,
   BOT_MOVE_TIME,
