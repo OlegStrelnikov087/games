@@ -22,7 +22,7 @@ export const playerIsOverdonePoints = (player: Player, throwPoints: number): boo
 }
 
 export const isPlayerWinRounds = (player: Player, points: number, throwType: ThrowTypes): boolean => {
-    return player.points - points === 0 && throwType === ThrowTypes.DOUBLED
+    return player.points - points === 0 && (throwType === ThrowTypes.DOUBLED || throwType === ThrowTypes.RED_BULL)
 }
 
 export const isPlayerDidAllThrows = (throwCount: number): boolean => {
