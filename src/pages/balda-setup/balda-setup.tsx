@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import './balda-setup.css'
+import { BALDA_GAME_TYPE } from "../../applications/balda/types/types";
+import { MAXIMUM_TIME_LIMIT_FOR_THROW, MINIMAL_TIME_LIMIT_FOR_THROW, NOT_TIME_LIMIT_FOR_THROW, STANDART_TIME_LIMIT_FOR_THROW } from "../../applications/balda/utils/balda-const";
 export const BaldaSetup = () => {
     const location = useLocation()
     const gameType = location.state
@@ -8,10 +10,10 @@ export const BaldaSetup = () => {
     const [player2, setPlayer2] = useState("");
     const [boardSize, setBoardSize] = useState<3 | 4 | 5 | 6>(5);
     const [timeLimitEnabled, setTimeLimitEnabled] = useState(false);
-    const [timeLimit, setTimeLimit] = useState(30);
+    const [timeLimit, setTimeLimit] = useState(STANDART_TIME_LIMIT_FOR_THROW);
     const navigate = useNavigate();
     useEffect(() => {
-        if (gameType === 'user-and-bot') {
+        if (gameType === BALDA_GAME_TYPE.BOT_AND_USER) {
             setPlayer2('Бот');
         }
     }, [gameType]);
@@ -21,14 +23,14 @@ export const BaldaSetup = () => {
             player1,
             player2,
             boardSize,
-            timeLimit: (timeLimitEnabled && timeLimit >= 10 && timeLimit <= 120) ? timeLimit : null
+            timeLimit: (timeLimitEnabled && timeLimit >= MINIMAL_TIME_LIMIT_FOR_THROW && timeLimit <= MAXIMUM_TIME_LIMIT_FOR_THROW) ? timeLimit : NOT_TIME_LIMIT_FOR_THROW
         };
         console.log("Начинаем игру с настройками:", gameConfig);
 
     }
     return (<div className="balda-users-setup">
         <h1>Настройка игры в Балду</h1>
-        {gameType === 'user-and-user' && (
+        {gameType === BALDA_GAME_TYPE.USER_AND_USER && (
             <>
                 <div className="setup-section">
                     <label>Игрок 1:</label>
@@ -48,7 +50,7 @@ export const BaldaSetup = () => {
                 </div>
             </>
         )}
-        {gameType === 'user-and-bot' && (
+        {gameType === BALDA_GAME_TYPE.BOT_AND_USER && (
              <div className="setup-section">
              <label>Игрок:</label>
              <input
@@ -100,7 +102,7 @@ export const BaldaSetup = () => {
         <button
             className="start-game-button"
             onClick={handleStartGame}
-            disabled={!player1.trim() || (gameType === 'user-and-user' && !player2.trim())}
+            disabled={!player1.trim() || (gameType === BALDA_GAME_TYPE.USER_AND_USER && !player2.trim())}
         >
             Начать игру
         </button>
