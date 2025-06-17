@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import './balda-setup.css'
 export const BaldaSetup = () => {
     const location = useLocation()
     const gameType = location.state
