@@ -14,6 +14,11 @@ export const Home = () => {
               description="Вирутальный дартс с подсчетом очков"
               path="/darts-setup"
             />
+            <GameCard
+            title="Балда"
+            description="Лучшая игра на уроке физики в 11 классе"
+            path="/balda-main"
+            />
           </div>
         </div>
       );
