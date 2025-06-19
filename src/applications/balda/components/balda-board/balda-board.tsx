@@ -1,11 +1,22 @@
-import { BaldaBoardValue } from "../../types/types"
+import { useEffect, useState } from "react"
+import { BaldaBoardValue, BaldaCellValue } from "../../types/types"
 import './balda-board.css'
 type BaldaBoardProps = {
     board: BaldaBoardValue,
     size: number,
-    onCellClick: (row: number, col: number) => void;
+    onCellClick: (row: number, col: number) => void,
+    startWord: BaldaCellValue[]
 }
-export const BaldaBoard = ({ board, size, onCellClick }: BaldaBoardProps) => {
+export const BaldaBoard = ({ board, size, onCellClick, startWord }: BaldaBoardProps) => {
+    const [boardArr, setBoardArr] = useState<BaldaBoardValue>(board)
+    useEffect(()=>{
+        const newBoardArr = [...boardArr.map(row=>[...row])]
+        const centerRowId = Math.floor(size/2)
+        startWord.map((letter, id)=> {
+            newBoardArr[centerRowId][id] = letter
+        })
+        setBoardArr(newBoardArr)
+    }, [board, size, startWord])
     return (
         <div className="balda-board"
             style={{
@@ -15,10 +26,10 @@ export const BaldaBoard = ({ board, size, onCellClick }: BaldaBoardProps) => {
                 gap: '4px'
             }}
         >
-            {board.map((row, rowId) =>
+            {boardArr.map((row, rowId) =>
                 row.map((cell, cellId) =>
                 (
-                    <div key={cellId} id={`row${rowId} cell${cellId}`} className="cell" onClick={() => onCellClick(rowId, cellId)}></div>
+                    <div key={cellId} id={`row${rowId} cell${cellId}`} className="cell" onClick={() => onCellClick(rowId, cellId)}>{cell}</div>
                 )))}
 
         </div>
