@@ -1,6 +1,6 @@
 import { BaldaBoard } from "../../applications/balda/components/balda-board/balda-board";
 import { useLocation } from "react-router-dom"
-
+import { BaldaKeyboard } from "../../applications/balda/components/balda-keyboard/balda-keyboard";
 export const BaldaGame = () => {
     const location = useLocation()
     const gameConfig = location.state
@@ -14,6 +14,7 @@ export const BaldaGame = () => {
     return (
      <div className="balda-game">
         <BaldaBoard board={board} size={gameConfig.boardSize} onCellClick={handleCellClick}/>
+        <BaldaKeyboard onKeyClick={(letter)=> console.log(letter)}/>
      </div>   
     )
 }
