@@ -13,22 +13,23 @@ export const BaldaGame = () => {
     const [boardIsClickable, setBoardIsClickable] = useState<boolean>(true)
     const [keyboardIsClickable, setKeyboardIsClickable] = useState<boolean>(false)
     const [selectedCell, setSelectedCell] = useState<[rowId: number, cellId: number] | null>(null)
-    const [choseWord, setChoseWord] = useState<boolean>(false)
-    const [choseLetter, setChoseLetter] = useState<boolean>(false)
-    const [choseCell, setChoseCell] = useState<boolean>(true)
+    const [goToChoseWord, setGoToChoseWord] = useState<boolean>(false)
+    const [goToChoseCell, setGoToChoseCell] = useState<boolean>(true)
     const [selectedLetters, setSelectedLetters] = useState<BaldaCellValue[]>([])
     const [enterIsClickable, setEnterIsClickable] = useState<boolean>(false)
+    const [backspaceIsClickable, setBackspaceIsClickable] = useState<boolean>(false)
+
     const handleCellClick = (rowId: number, cellId: number) => {
         if (!boardIsClickable) return
-        if (choseCell) {
+        if (goToChoseCell){
             console.log(rowId, cellId);
             setSelectedCell([rowId, cellId])
             setBoardIsClickable(false)
             setKeyboardIsClickable(true)
-            setChoseCell(false)
-            setChoseLetter(true)
+            setGoToChoseCell(false)
         }
-        if (choseWord) {
+
+        if (goToChoseWord) {
             console.log(rowId, cellId);
             const newWord = [...selectedLetters]
             newWord.push(board[rowId][cellId])
@@ -38,37 +39,43 @@ export const BaldaGame = () => {
     }
 
     const handleKeyClick = (letter: string) => {
-        if (!keyboardIsClickable) return
-        console.log(letter);
+        if (!keyboardIsClickable || selectedCell === null) return
         console.log(selectedCell);
-        if (selectedCell !== null) {
-            console.log('letter is chosed');
-            const newBoard = [...board.map(row => [...row])]
-            newBoard[selectedCell[0]][selectedCell[1]] = letter
-            setBoard(newBoard)
-            setKeyboardIsClickable(false)
-            setBoardIsClickable(true)
-            setChoseLetter(false)
-            setChoseWord(true)
-        }
-
+        console.log(`${letter} is chosed`);
+        const newBoard = [...board.map(row => [...row])]
+        newBoard[selectedCell[0]][selectedCell[1]] = letter
+        setBoard(newBoard)
+        setKeyboardIsClickable(false)
+        setBoardIsClickable(true)
+        setGoToChoseWord(true)
+        setBackspaceIsClickable(true)
     }
 
     const handleEnterClick = () => {
         if (!enterIsClickable) return
         console.log('enter');
-        if (choseWord) {
+        if (goToChoseWord) {
             console.log(selectedLetters);
-            setChoseWord(false)
+            setGoToChoseWord(false)
             setBoardIsClickable(true)
             setEnterIsClickable(false)
-            setChoseCell(true)
+            setGoToChoseCell(true)
             setSelectedLetters([])
         }
     }
 
     const handleBackspaceClick = () => {
-        if (keyboardIsClickable) console.log('backspace');
+        if (!backspaceIsClickable || selectedCell === null) return
+        console.log('backspace');
+        console.log(`delete ${selectedCell}`);
+        const newBoard = [...board]
+        newBoard[selectedCell[0]][selectedCell[1]] = BALDA_EMPTY_CELL_VALUE
+        setBoard(newBoard)
+        setBoardIsClickable(false)
+        setGoToChoseWord(false)
+        setGoToChoseCell(false)
+        setKeyboardIsClickable(true)
+        setBackspaceIsClickable(false)
     }
 
     return (

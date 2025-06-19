@@ -7,17 +7,7 @@ type BaldaBoardProps = {
     onCellClick: (row: number, col: number) => void,
     startWord: BaldaCellValue[],
 }
-export const BaldaBoard = ({ board, size, onCellClick, startWord }: BaldaBoardProps) => {    
-    // const [boardArr, setBoardArr] = useState<BaldaBoardValue>(board)
-    // useEffect(()=>{
-    //     const newBoardArr = [...boardArr.map(row=>[...row])]
-    //     const centerRowId = Math.floor(size/2)
-    //     startWord.map((letter, id)=> {
-    //         newBoardArr[centerRowId][id] = letter
-    //     })
-    //     setBoardArr(newBoardArr)
-    // }, [board, size, startWord])
-
+export const BaldaBoard = ({ board, size, onCellClick, startWord }: BaldaBoardProps) => {
     return (
         <div className="balda-board"
             style={{
