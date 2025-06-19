@@ -5,7 +5,6 @@ import { type BoardValue, GameNotFinished, type GameResult, GameRole } from '../
 import  { useState } from 'react';
 import './board.css';
 import Lottie from 'lottie-react';
-// import gridAnimation from '@assets/grid.json';
 import gridAnimation from '../../../../assets/grid.json';
 import {
   BOARD_INITIAL_STATE,

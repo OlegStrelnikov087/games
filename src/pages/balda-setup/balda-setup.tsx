@@ -25,9 +25,9 @@ export const BaldaSetup = () => {
             boardSize,
             timeLimit: (timeLimitEnabled && timeLimit >= MINIMAL_TIME_LIMIT_FOR_THROW && timeLimit <= MAXIMUM_TIME_LIMIT_FOR_THROW) ? timeLimit : NOT_TIME_LIMIT_FOR_THROW
         };
-        console.log("Начинаем игру с настройками:", gameConfig);
-
+        navigate('/balda-game', {state: gameConfig})
     }
+    
     return (<div className="balda-users-setup">
         <h1>Настройка игры в Балду</h1>
         {gameType === BALDA_GAME_TYPE.USER_AND_USER && (

@@ -7,6 +7,7 @@ import SetupPage from "../pages/darts-setup/setup";
 import { Darts } from "../pages/darts-game/darts-game";
 import { BaldaMainPage } from "../pages/balda-main/balda-main";
 import { BaldaSetup } from "../pages/balda-setup/balda-setup";
+import { BaldaGame } from "../pages/balda-game/balda-game";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -27,15 +28,19 @@ export const router = createBrowserRouter([
       },
       {
         path: "darts",
-        element: <Darts/>
+        element: <Darts />
       },
       {
         path: 'balda-main',
-        element: <BaldaMainPage/>
+        element: <BaldaMainPage />
       },
       {
         path: 'balda-setup',
-        element: <BaldaSetup/>
+        element: <BaldaSetup />
+      },
+      {
+        path: 'balda-game',
+        element: <BaldaGame />
       }
 
     ],
