@@ -2,6 +2,8 @@ import './balda-keyboard.css';
 
 type BaldaKeyboardProps = {
   onKeyClick: (letter: string) => void;
+  onEnter: () => void;
+  onBackspace: () => void;
 };
 
 const ROWS = [
@@ -10,7 +12,7 @@ const ROWS = [
   ['Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я'],
 ];
 
-export const BaldaKeyboard = ({ onKeyClick }: BaldaKeyboardProps) => {
+export const BaldaKeyboard = ({ onKeyClick, onEnter, onBackspace }: BaldaKeyboardProps) => {
   return (
     <div className="balda-keyboard">
       {ROWS.map((row, rowIndex) => (
@@ -27,10 +29,10 @@ export const BaldaKeyboard = ({ onKeyClick }: BaldaKeyboardProps) => {
         </div>
       ))}
       <div className="keyboard-controls">
-        <button className="keyboard-key control-key">
+        <button className="keyboard-key control-key" onClick={onBackspace}>
           ⌫
         </button>
-        <button className="keyboard-key control-key enter-key">
+        <button className="keyboard-key control-key enter-key" onClick={onEnter}>
           Готово
         </button>
       </div>

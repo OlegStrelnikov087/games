@@ -14,3 +14,9 @@
    height: 100%;
    border: 1px solid black;
 }
+
+.cell.selected {
+    background-color: #3498db;
+    color: white;
+    border-color: #2980b9;
+  }

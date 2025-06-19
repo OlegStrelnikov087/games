@@ -5,18 +5,19 @@ type BaldaBoardProps = {
     board: BaldaBoardValue,
     size: number,
     onCellClick: (row: number, col: number) => void,
-    startWord: BaldaCellValue[]
+    startWord: BaldaCellValue[],
 }
-export const BaldaBoard = ({ board, size, onCellClick, startWord }: BaldaBoardProps) => {
-    const [boardArr, setBoardArr] = useState<BaldaBoardValue>(board)
-    useEffect(()=>{
-        const newBoardArr = [...boardArr.map(row=>[...row])]
-        const centerRowId = Math.floor(size/2)
-        startWord.map((letter, id)=> {
-            newBoardArr[centerRowId][id] = letter
-        })
-        setBoardArr(newBoardArr)
-    }, [board, size, startWord])
+export const BaldaBoard = ({ board, size, onCellClick, startWord }: BaldaBoardProps) => {    
+    // const [boardArr, setBoardArr] = useState<BaldaBoardValue>(board)
+    // useEffect(()=>{
+    //     const newBoardArr = [...boardArr.map(row=>[...row])]
+    //     const centerRowId = Math.floor(size/2)
+    //     startWord.map((letter, id)=> {
+    //         newBoardArr[centerRowId][id] = letter
+    //     })
+    //     setBoardArr(newBoardArr)
+    // }, [board, size, startWord])
+
     return (
         <div className="balda-board"
             style={{
@@ -26,7 +27,7 @@ export const BaldaBoard = ({ board, size, onCellClick, startWord }: BaldaBoardPr
                 gap: '4px'
             }}
         >
-            {boardArr.map((row, rowId) =>
+            {board.map((row, rowId) =>
                 row.map((cell, cellId) =>
                 (
                     <div key={cellId} id={`row${rowId} cell${cellId}`} className="cell" onClick={() => onCellClick(rowId, cellId)}>{cell}</div>
