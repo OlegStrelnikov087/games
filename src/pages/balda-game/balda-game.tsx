@@ -18,9 +18,12 @@ export const BaldaGame = () => {
     const [selectedLetters, setSelectedLetters] = useState<BaldaCellValue[]>([])
     const [enterIsClickable, setEnterIsClickable] = useState<boolean>(false)
     const [backspaceIsClickable, setBackspaceIsClickable] = useState<boolean>(false)
-
+    const [isPlayerThrow, setIsPlayerThrow] = useState<boolean>(false)
+    const [isBotThrow, setIsBotThrow] = useState<boolean>(false)
 
     useEffect(() => {
+        console.log(gameConfig);
+        
         const centerRowId = Math.floor(gameConfig.boardSize / 2)
         const startWord = ['С', 'Л', 'О', 'В', 'О']
         const newBoard = boardArr.map(row => [...row])
@@ -31,7 +34,7 @@ export const BaldaGame = () => {
     }, [gameConfig.boardSize])
 
     const handleCellClick = (rowId: number, cellId: number) => {
-        if (!boardIsClickable) return
+        if (!boardIsClickable ) return
         if (goToChoseCell) {
             console.log(rowId, cellId);
             setSelectedCell([rowId, cellId])
@@ -64,7 +67,6 @@ export const BaldaGame = () => {
 
     const handleEnterClick = () => {
         if (!enterIsClickable) return
-        console.log('enter');
         if (goToChoseWord) {
             console.log(selectedLetters);
             setGoToChoseWord(false)
@@ -92,7 +94,7 @@ export const BaldaGame = () => {
     return (
         <div className="balda-game">
             <div className="board-container">
-                <BaldaBoard board={board} size={gameConfig.boardSize} onCellClick={handleCellClick} startWord={['С', 'Л', 'О', 'В', 'О']} />
+                <BaldaBoard board={board} size={gameConfig.boardSize} onCellClick={handleCellClick} />
             </div>
             <div className="keyboard-container">
                 <BaldaKeyboard onKeyClick={handleKeyClick} onBackspace={handleBackspaceClick} onEnter={handleEnterClick} />
