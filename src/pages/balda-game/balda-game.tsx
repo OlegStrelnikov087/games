@@ -2,7 +2,7 @@ import { BaldaBoard } from "../../applications/balda/components/balda-board/bald
 import { useLocation } from "react-router-dom"
 import { BaldaKeyboard } from "../../applications/balda/components/balda-keyboard/balda-keyboard";
 import './balda-game.css'
-import { BaldaBoardValue, BaldaCellValue } from "../../applications/balda/types/types";
+import { BALDA_GAME_TYPE, BaldaBoardValue, BaldaCellValue, BaldaPlayer } from "../../applications/balda/types/types";
 import { BALDA_EMPTY_CELL_VALUE } from "../../applications/balda/utils/balda-const";
 import { useEffect, useState } from "react";
 export const BaldaGame = () => {
@@ -20,10 +20,10 @@ export const BaldaGame = () => {
     const [backspaceIsClickable, setBackspaceIsClickable] = useState<boolean>(false)
     const [isPlayerThrow, setIsPlayerThrow] = useState<boolean>(false)
     const [isBotThrow, setIsBotThrow] = useState<boolean>(false)
+    const [currentPlayerId, setCurrentPlayerId] = useState<number>(0)
+    const [players, setPlayers] = useState<[BaldaPlayer, BaldaPlayer]>([gameConfig.player1, gameConfig.player2])
 
     useEffect(() => {
-        console.log(gameConfig);
-        
         const centerRowId = Math.floor(gameConfig.boardSize / 2)
         const startWord = ['С', 'Л', 'О', 'В', 'О']
         const newBoard = boardArr.map(row => [...row])
@@ -34,7 +34,7 @@ export const BaldaGame = () => {
     }, [gameConfig.boardSize])
 
     const handleCellClick = (rowId: number, cellId: number) => {
-        if (!boardIsClickable ) return
+        if (!boardIsClickable) return
         if (goToChoseCell) {
             console.log(rowId, cellId);
             setSelectedCell([rowId, cellId])
@@ -73,7 +73,15 @@ export const BaldaGame = () => {
             setBoardIsClickable(true)
             setEnterIsClickable(false)
             setGoToChoseCell(true)
+            const playersArr = [...players]
+            playersArr[currentPlayerId].score += selectedLetters.length
             setSelectedLetters([])
+            const newCurrentPlayerId = (currentPlayerId+1)%players.length
+            setCurrentPlayerId(newCurrentPlayerId)
+
+            if (gameConfig.gameType === BALDA_GAME_TYPE.USER_AND_USER) {
+                
+            }
         }
     }
 
@@ -93,6 +101,14 @@ export const BaldaGame = () => {
 
     return (
         <div className="balda-game">
+            <div className="player1">
+                <h1>{players[0].name}</h1>
+                {players[0].score}
+            </div>
+            <div className="player2">
+                <h1>{players[1].name}</h1>
+                {players[1].score}
+            </div>
             <div className="board-container">
                 <BaldaBoard board={board} size={gameConfig.boardSize} onCellClick={handleCellClick} />
             </div>
