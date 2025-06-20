@@ -17,9 +17,6 @@ export const BaldaGame = () => {
     const [goToChoseCell, setGoToChoseCell] = useState<boolean>(true)
     const [selectedLetters, setSelectedLetters] = useState<BaldaCellValue[]>([])
     const [enterIsClickable, setEnterIsClickable] = useState<boolean>(false)
-    const [backspaceIsClickable, setBackspaceIsClickable] = useState<boolean>(false)
-    const [isPlayerThrow, setIsPlayerThrow] = useState<boolean>(false)
-    const [isBotThrow, setIsBotThrow] = useState<boolean>(false)
     const [currentPlayerId, setCurrentPlayerId] = useState<number>(0)
     const [players, setPlayers] = useState<[BaldaPlayer, BaldaPlayer]>([gameConfig.player1, gameConfig.player2])
 
@@ -49,7 +46,9 @@ export const BaldaGame = () => {
             newWord.push(board[rowId][cellId])
             setSelectedLetters(newWord)
             setEnterIsClickable(true)
+            setSelectedCell(null)
         }
+
     }
 
     const handleKeyClick = (letter: string) => {
@@ -62,7 +61,6 @@ export const BaldaGame = () => {
         setKeyboardIsClickable(false)
         setBoardIsClickable(true)
         setGoToChoseWord(true)
-        setBackspaceIsClickable(true)
     }
 
     const handleEnterClick = () => {
@@ -76,17 +74,27 @@ export const BaldaGame = () => {
             const playersArr = [...players]
             playersArr[currentPlayerId].score += selectedLetters.length
             setSelectedLetters([])
-            const newCurrentPlayerId = (currentPlayerId+1)%players.length
-            setCurrentPlayerId(newCurrentPlayerId)
-
+            const newCurrentPlayerId = (currentPlayerId + 1) % players.length
+            setSelectedCell(null)
             if (gameConfig.gameType === BALDA_GAME_TYPE.USER_AND_USER) {
-                
+                setCurrentPlayerId(newCurrentPlayerId)
+            }
+            if (gameConfig.gameType === BALDA_GAME_TYPE.BOT_AND_USER) {
+                setTimeout(() => {
+                    const newBoard = [...board]
+                    newBoard[0][0] = 'Щ'
+                    setBoard(newBoard)
+                    playersArr[newCurrentPlayerId].score += 5
+                    console.log(`бот сходил на первую клутеку и собрал слово из 5 букв`);
+                }, 2000)
+                const lastCurrentPlayerId = (newCurrentPlayerId + 1) % players.length
+                setCurrentPlayerId(lastCurrentPlayerId)
             }
         }
     }
 
     const handleBackspaceClick = () => {
-        if (!backspaceIsClickable || selectedCell === null) return
+        if (selectedCell === null || board[selectedCell[0]][selectedCell[1]] === BALDA_EMPTY_CELL_VALUE) return
         console.log('backspace');
         console.log(`delete ${selectedCell}`);
         const newBoard = [...board]
@@ -96,7 +104,6 @@ export const BaldaGame = () => {
         setGoToChoseWord(false)
         setGoToChoseCell(false)
         setKeyboardIsClickable(true)
-        setBackspaceIsClickable(false)
     }
 
     return (
