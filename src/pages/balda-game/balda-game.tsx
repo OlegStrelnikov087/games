@@ -4,7 +4,7 @@ import { BaldaKeyboard } from "../../applications/balda/components/balda-keyboar
 import './balda-game.css'
 import { BaldaBoardValue, BaldaCellValue } from "../../applications/balda/types/types";
 import { BALDA_EMPTY_CELL_VALUE } from "../../applications/balda/utils/balda-const";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 export const BaldaGame = () => {
     const location = useLocation()
     const gameConfig = location.state
@@ -19,9 +19,20 @@ export const BaldaGame = () => {
     const [enterIsClickable, setEnterIsClickable] = useState<boolean>(false)
     const [backspaceIsClickable, setBackspaceIsClickable] = useState<boolean>(false)
 
+
+    useEffect(() => {
+        const centerRowId = Math.floor(gameConfig.boardSize / 2)
+        const startWord = ['С', 'Л', 'О', 'В', 'О']
+        const newBoard = boardArr.map(row => [...row])
+        for (let i = 0; i < startWord.length; i++) {
+            newBoard[centerRowId][i] = startWord[i]
+        }
+        setBoard(newBoard)
+    }, [gameConfig.boardSize])
+
     const handleCellClick = (rowId: number, cellId: number) => {
         if (!boardIsClickable) return
-        if (goToChoseCell){
+        if (goToChoseCell) {
             console.log(rowId, cellId);
             setSelectedCell([rowId, cellId])
             setBoardIsClickable(false)

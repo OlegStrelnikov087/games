@@ -5,9 +5,8 @@ type BaldaBoardProps = {
     board: BaldaBoardValue,
     size: number,
     onCellClick: (row: number, col: number) => void,
-    startWord: BaldaCellValue[],
 }
-export const BaldaBoard = ({ board, size, onCellClick, startWord }: BaldaBoardProps) => {
+export const BaldaBoard = ({ board, size, onCellClick }: BaldaBoardProps) => {
     return (
         <div className="balda-board"
             style={{
