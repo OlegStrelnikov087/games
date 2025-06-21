@@ -6,6 +6,7 @@ import { BALDA_GAME_TYPE, BaldaBoardValue, BaldaCellValue, BaldaPlayer } from ".
 import { BALDA_EMPTY_CELL_VALUE } from "../../applications/balda/utils/balda-const";
 import { useEffect, useState } from "react";
 import { getBoardAfterBotThrow } from "../../applications/balda/utils/balda-game-logic";
+
 export const BaldaGame = () => {
     const location = useLocation()
     const gameConfig = location.state
@@ -20,7 +21,7 @@ export const BaldaGame = () => {
     const [enterIsClickable, setEnterIsClickable] = useState<boolean>(false)
     const [currentPlayerId, setCurrentPlayerId] = useState<number>(0)
     const [players, setPlayers] = useState<[BaldaPlayer, BaldaPlayer]>([gameConfig.player1, gameConfig.player2])
-
+    const [words, setWords] = useState<string[]>([])
     useEffect(() => {
         const centerRowId = Math.floor(gameConfig.boardSize / 2)
         const startWord = ['С', 'Л', 'О', 'В', 'О']
@@ -30,6 +31,20 @@ export const BaldaGame = () => {
         }
         setBoard(newBoard)
     }, [gameConfig.boardSize])
+
+    useEffect(() => {
+        const loadWords = async () => {
+            try {
+                const response = await fetch('/singular.txt')
+                const text = await response.text()
+                const words = text.split('\n').map(word => word.trim().toLowerCase());
+                setWords(words)
+            } catch (error) {
+                console.error('Error loading dictionary:', error);
+            }
+        }
+        loadWords()
+    }, [])
 
     const handleCellClick = (rowId: number, cellId: number) => {
         if (!boardIsClickable) return
@@ -46,13 +61,13 @@ export const BaldaGame = () => {
         }
 
         if (goToChoseWord) {
-            if (board[rowId][cellId]!== BALDA_EMPTY_CELL_VALUE) {
+            if (board[rowId][cellId] !== BALDA_EMPTY_CELL_VALUE) {
                 console.log(rowId, cellId);
                 const newWord = [...selectedLetters]
                 newWord.push(board[rowId][cellId])
                 setSelectedLetters(newWord)
                 setEnterIsClickable(true)
-                setSelectedCell(null)
+                // setSelectedCell(null)
             } else {
                 console.log('эта ячейка пустая, выбери другую');
             }
@@ -72,32 +87,47 @@ export const BaldaGame = () => {
         setGoToChoseWord(true)
     }
 
-    const handleEnterClick = () => {
+    const handleEnterClick = async () => {
         if (!enterIsClickable) return
         if (goToChoseWord) {
             console.log(selectedLetters);
-            setGoToChoseWord(false)
-            setBoardIsClickable(true)
-            setEnterIsClickable(false)
-            setGoToChoseCell(true)
-            const playersArr = [...players]
-            playersArr[currentPlayerId].score += selectedLetters.length
-            setSelectedLetters([])
-            const newCurrentPlayerId = (currentPlayerId + 1) % players.length
-            setSelectedCell(null)
-            if (gameConfig.gameType === BALDA_GAME_TYPE.USER_AND_USER) {
+            if (words.includes(selectedLetters.join('').toLowerCase())) {
+                setGoToChoseWord(false)
+                setBoardIsClickable(true)
+                setEnterIsClickable(false)
+                setGoToChoseCell(true)
+                const playersArr = [...players]
+                playersArr[currentPlayerId].score += selectedLetters.length
+                setSelectedLetters([])
+                const newCurrentPlayerId = (currentPlayerId + 1) % players.length
+                setSelectedCell(null)
                 setCurrentPlayerId(newCurrentPlayerId)
             }
-            if (gameConfig.gameType === BALDA_GAME_TYPE.BOT_AND_USER) {
-                setTimeout(() => {
-                    const newBoard = [...getBoardAfterBotThrow(board, gameConfig.boardSize)]
+            else {
+                if (selectedCell !== null) {
+                    setSelectedLetters([])
+                    setGoToChoseCell(true)
+                    const newBoard = [...board]
+                    newBoard[selectedCell[0]][selectedCell[1]] = BALDA_EMPTY_CELL_VALUE
                     setBoard(newBoard)
-                    playersArr[newCurrentPlayerId].score += 5
-                    console.log(`бот сходил на первую клутеку и собрал слово из 5 букв`);
-                }, 2000)
-                const lastCurrentPlayerId = (newCurrentPlayerId + 1) % players.length
-                setCurrentPlayerId(lastCurrentPlayerId)
+                    setSelectedCell(null)
+                    setBoardIsClickable(true)
+                    setEnterIsClickable(false)
+                }
             }
+            // if (gameConfig.gameType === BALDA_GAME_TYPE.USER_AND_USER) {
+            //     setCurrentPlayerId(newCurrentPlayerId)
+            // }
+            // if (gameConfig.gameType === BALDA_GAME_TYPE.BOT_AND_USER) {
+            //     setTimeout(() => {
+            //         const newBoard = [...getBoardAfterBotThrow(board, gameConfig.boardSize)]
+            //         setBoard(newBoard)
+            //         playersArr[newCurrentPlayerId].score += 5
+            //         console.log(`бот сходил на первую клутеку и собрал слово из 5 букв`);
+            //     }, 2000)
+            //     const lastCurrentPlayerId = (newCurrentPlayerId + 1) % players.length
+            //     setCurrentPlayerId(lastCurrentPlayerId)
+            // }
         }
     }
 
