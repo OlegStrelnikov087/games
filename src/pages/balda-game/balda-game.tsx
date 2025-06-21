@@ -22,22 +22,21 @@ export const BaldaGame = () => {
     const [currentPlayerId, setCurrentPlayerId] = useState<number>(0)
     const [players, setPlayers] = useState<[BaldaPlayer, BaldaPlayer]>([gameConfig.player1, gameConfig.player2])
     const [words, setWords] = useState<string[]>([])
-    useEffect(() => {
-        const centerRowId = Math.floor(gameConfig.boardSize / 2)
-        const startWord = ['С', 'Л', 'О', 'В', 'О']
-        const newBoard = boardArr.map(row => [...row])
-        for (let i = 0; i < startWord.length; i++) {
-            newBoard[centerRowId][i] = startWord[i]
-        }
-        setBoard(newBoard)
-    }, [gameConfig.boardSize])
-
+    const [startWord, setStartWord] = useState<string[]>([])
     useEffect(() => {
         const loadWords = async () => {
             try {
                 const response = await fetch('/singular.txt')
                 const text = await response.text()
                 const words = text.split('\n').map(word => word.trim().toLowerCase());
+                let randomId
+                let word
+                do {
+                    randomId = Math.floor(Math.random()*words.length)
+                    word = words[randomId].split('')
+                } while (word.length !== gameConfig.boardSize)
+                setStartWord(word)
+                setStartWord
                 setWords(words)
             } catch (error) {
                 console.error('Error loading dictionary:', error);
@@ -46,31 +45,33 @@ export const BaldaGame = () => {
         loadWords()
     }, [])
 
+    useEffect(() => {
+        const centerRowId = Math.floor(gameConfig.boardSize / 2)
+        const word = [...startWord]
+        const newBoard = boardArr.map(row => [...row])
+        for (let i = 0; i < word.length; i++) {
+            newBoard[centerRowId][i] = word[i]
+        }
+        setBoard(newBoard)
+    }, [gameConfig.boardSize, startWord])
+
+
     const handleCellClick = (rowId: number, cellId: number) => {
         if (!boardIsClickable) return
-        if (goToChoseCell) {
-            if (board[rowId][cellId] === BALDA_EMPTY_CELL_VALUE) {
-                console.log(rowId, cellId);
-                setSelectedCell([rowId, cellId])
-                setBoardIsClickable(false)
-                setKeyboardIsClickable(true)
-                setGoToChoseCell(false)
-            } else {
-                console.log('эта ячейка не пустая');
-            }
+        if (goToChoseCell && board[rowId][cellId] === BALDA_EMPTY_CELL_VALUE) {
+            console.log(rowId, cellId);
+            setSelectedCell([rowId, cellId])
+            setBoardIsClickable(false)
+            setKeyboardIsClickable(true)
+            setGoToChoseCell(false)
         }
 
-        if (goToChoseWord) {
-            if (board[rowId][cellId] !== BALDA_EMPTY_CELL_VALUE) {
-                console.log(rowId, cellId);
-                const newWord = [...selectedLetters]
-                newWord.push(board[rowId][cellId])
-                setSelectedLetters(newWord)
-                setEnterIsClickable(true)
-                // setSelectedCell(null)
-            } else {
-                console.log('эта ячейка пустая, выбери другую');
-            }
+        if (goToChoseWord && board[rowId][cellId] !== BALDA_EMPTY_CELL_VALUE) {
+            console.log(rowId, cellId);
+            const newWord = [...selectedLetters]
+            newWord.push(board[rowId][cellId])
+            setSelectedLetters(newWord)
+            setEnterIsClickable(true)
         }
 
     }
@@ -87,7 +88,7 @@ export const BaldaGame = () => {
         setGoToChoseWord(true)
     }
 
-    const handleEnterClick = async () => {
+    const handleEnterClick = () => {
         if (!enterIsClickable) return
         if (goToChoseWord) {
             console.log(selectedLetters);
@@ -104,6 +105,7 @@ export const BaldaGame = () => {
                 setCurrentPlayerId(newCurrentPlayerId)
             }
             else {
+                console.log('НЕТ ТАКОГО СЛОВА');
                 if (selectedCell !== null) {
                     setSelectedLetters([])
                     setGoToChoseCell(true)
