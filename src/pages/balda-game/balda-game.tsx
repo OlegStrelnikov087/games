@@ -33,20 +33,28 @@ export const BaldaGame = () => {
     const handleCellClick = (rowId: number, cellId: number) => {
         if (!boardIsClickable) return
         if (goToChoseCell) {
-            console.log(rowId, cellId);
-            setSelectedCell([rowId, cellId])
-            setBoardIsClickable(false)
-            setKeyboardIsClickable(true)
-            setGoToChoseCell(false)
+            if (board[rowId][cellId] === BALDA_EMPTY_CELL_VALUE) {
+                console.log(rowId, cellId);
+                setSelectedCell([rowId, cellId])
+                setBoardIsClickable(false)
+                setKeyboardIsClickable(true)
+                setGoToChoseCell(false)
+            } else {
+                console.log('эта ячейка не пустая');
+            }
         }
 
         if (goToChoseWord) {
-            console.log(rowId, cellId);
-            const newWord = [...selectedLetters]
-            newWord.push(board[rowId][cellId])
-            setSelectedLetters(newWord)
-            setEnterIsClickable(true)
-            setSelectedCell(null)
+            if (board[rowId][cellId]!== BALDA_EMPTY_CELL_VALUE) {
+                console.log(rowId, cellId);
+                const newWord = [...selectedLetters]
+                newWord.push(board[rowId][cellId])
+                setSelectedLetters(newWord)
+                setEnterIsClickable(true)
+                setSelectedCell(null)
+            } else {
+                console.log('эта ячейка пустая, выбери другую');
+            }
         }
 
     }
