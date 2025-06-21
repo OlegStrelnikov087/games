@@ -5,6 +5,7 @@ import './balda-game.css'
 import { BALDA_GAME_TYPE, BaldaBoardValue, BaldaCellValue, BaldaPlayer } from "../../applications/balda/types/types";
 import { BALDA_EMPTY_CELL_VALUE } from "../../applications/balda/utils/balda-const";
 import { useEffect, useState } from "react";
+import { getBoardAfterBotThrow } from "../../applications/balda/utils/balda-game-logic";
 export const BaldaGame = () => {
     const location = useLocation()
     const gameConfig = location.state
@@ -89,8 +90,7 @@ export const BaldaGame = () => {
             }
             if (gameConfig.gameType === BALDA_GAME_TYPE.BOT_AND_USER) {
                 setTimeout(() => {
-                    const newBoard = [...board]
-                    newBoard[0][0] = 'Щ'
+                    const newBoard = [...getBoardAfterBotThrow(board, gameConfig.boardSize)]
                     setBoard(newBoard)
                     playersArr[newCurrentPlayerId].score += 5
                     console.log(`бот сходил на первую клутеку и собрал слово из 5 букв`);
