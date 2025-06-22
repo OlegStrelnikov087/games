@@ -5,7 +5,6 @@ import './balda-game.css'
 import { BALDA_GAME_TYPE, BaldaBoardValue, BaldaCellValue, BaldaPlayer } from "../../applications/balda/types/types";
 import { BALDA_EMPTY_CELL_VALUE } from "../../applications/balda/utils/balda-const";
 import { useEffect, useState } from "react";
-import { getBoardAfterBotThrow } from "../../applications/balda/utils/balda-game-logic";
 
 export const BaldaGame = () => {
     const location = useLocation()
@@ -23,20 +22,21 @@ export const BaldaGame = () => {
     const [players, setPlayers] = useState<[BaldaPlayer, BaldaPlayer]>([gameConfig.player1, gameConfig.player2])
     const [words, setWords] = useState<string[]>([])
     const [startWord, setStartWord] = useState<string[]>([])
+
     useEffect(() => {
         const loadWords = async () => {
             try {
                 const response = await fetch('/singular.txt')
                 const text = await response.text()
-                const words = text.split('\n').map(word => word.trim().toLowerCase());
+                const words = text.split('\n').map(word => word.trim().toLowerCase());                
                 let randomId
                 let word
                 do {
                     randomId = Math.floor(Math.random()*words.length)
                     word = words[randomId].split('')
                 } while (word.length !== gameConfig.boardSize)
+                words.splice(words.indexOf(word.join('')),1)
                 setStartWord(word)
-                setStartWord
                 setWords(words)
             } catch (error) {
                 console.error('Error loading dictionary:', error);
@@ -50,7 +50,7 @@ export const BaldaGame = () => {
         const word = [...startWord]
         const newBoard = boardArr.map(row => [...row])
         for (let i = 0; i < word.length; i++) {
-            newBoard[centerRowId][i] = word[i]
+            newBoard[centerRowId][i] = word[i].toLocaleUpperCase()
         }
         setBoard(newBoard)
     }, [gameConfig.boardSize, startWord])
@@ -59,7 +59,6 @@ export const BaldaGame = () => {
     const handleCellClick = (rowId: number, cellId: number) => {
         if (!boardIsClickable) return
         if (goToChoseCell && board[rowId][cellId] === BALDA_EMPTY_CELL_VALUE) {
-            console.log(rowId, cellId);
             setSelectedCell([rowId, cellId])
             setBoardIsClickable(false)
             setKeyboardIsClickable(true)
@@ -67,7 +66,6 @@ export const BaldaGame = () => {
         }
 
         if (goToChoseWord && board[rowId][cellId] !== BALDA_EMPTY_CELL_VALUE) {
-            console.log(rowId, cellId);
             const newWord = [...selectedLetters]
             newWord.push(board[rowId][cellId])
             setSelectedLetters(newWord)
@@ -78,8 +76,6 @@ export const BaldaGame = () => {
 
     const handleKeyClick = (letter: string) => {
         if (!keyboardIsClickable || selectedCell === null) return
-        console.log(selectedCell);
-        console.log(`${letter} is chosed`);
         const newBoard = [...board.map(row => [...row])]
         newBoard[selectedCell[0]][selectedCell[1]] = letter
         setBoard(newBoard)
@@ -91,7 +87,6 @@ export const BaldaGame = () => {
     const handleEnterClick = () => {
         if (!enterIsClickable) return
         if (goToChoseWord) {
-            console.log(selectedLetters);
             if (words.includes(selectedLetters.join('').toLowerCase())) {
                 setGoToChoseWord(false)
                 setBoardIsClickable(true)
@@ -103,9 +98,11 @@ export const BaldaGame = () => {
                 const newCurrentPlayerId = (currentPlayerId + 1) % players.length
                 setSelectedCell(null)
                 setCurrentPlayerId(newCurrentPlayerId)
+                const newWords = [...words]
+                newWords.splice(words.indexOf(selectedLetters.join('').toLowerCase()), 1)
+                setWords(newWords)
             }
             else {
-                console.log('НЕТ ТАКОГО СЛОВА');
                 if (selectedCell !== null) {
                     setSelectedLetters([])
                     setGoToChoseCell(true)
@@ -117,26 +114,11 @@ export const BaldaGame = () => {
                     setEnterIsClickable(false)
                 }
             }
-            // if (gameConfig.gameType === BALDA_GAME_TYPE.USER_AND_USER) {
-            //     setCurrentPlayerId(newCurrentPlayerId)
-            // }
-            // if (gameConfig.gameType === BALDA_GAME_TYPE.BOT_AND_USER) {
-            //     setTimeout(() => {
-            //         const newBoard = [...getBoardAfterBotThrow(board, gameConfig.boardSize)]
-            //         setBoard(newBoard)
-            //         playersArr[newCurrentPlayerId].score += 5
-            //         console.log(`бот сходил на первую клутеку и собрал слово из 5 букв`);
-            //     }, 2000)
-            //     const lastCurrentPlayerId = (newCurrentPlayerId + 1) % players.length
-            //     setCurrentPlayerId(lastCurrentPlayerId)
-            // }
         }
     }
 
     const handleBackspaceClick = () => {
         if (selectedCell === null || board[selectedCell[0]][selectedCell[1]] === BALDA_EMPTY_CELL_VALUE) return
-        console.log('backspace');
-        console.log(`delete ${selectedCell}`);
         const newBoard = [...board]
         newBoard[selectedCell[0]][selectedCell[1]] = BALDA_EMPTY_CELL_VALUE
         setBoard(newBoard)
