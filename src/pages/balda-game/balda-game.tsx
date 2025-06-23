@@ -22,20 +22,22 @@ export const BaldaGame = () => {
     const [players, setPlayers] = useState<[BaldaPlayer, BaldaPlayer]>([gameConfig.player1, gameConfig.player2])
     const [words, setWords] = useState<string[]>([])
     const [startWord, setStartWord] = useState<string[]>([])
+    const [timeLeft, setTimeLeft] = useState<number>(gameConfig.timeLimit);
+    const [isTimerActive, setIsTimerActive] = useState<boolean>(true);
 
     useEffect(() => {
         const loadWords = async () => {
             try {
                 const response = await fetch('/singular.txt')
                 const text = await response.text()
-                const words = text.split('\n').map(word => word.trim().toLowerCase());                
+                const words = text.split('\n').map(word => word.trim().toLowerCase());
                 let randomId
                 let word
                 do {
-                    randomId = Math.floor(Math.random()*words.length)
+                    randomId = Math.floor(Math.random() * words.length)
                     word = words[randomId].split('')
                 } while (word.length !== gameConfig.boardSize)
-                words.splice(words.indexOf(word.join('')),1)
+                words.splice(words.indexOf(word.join('')), 1)
                 setStartWord(word)
                 setWords(words)
             } catch (error) {
@@ -55,6 +57,34 @@ export const BaldaGame = () => {
         setBoard(newBoard)
     }, [gameConfig.boardSize, startWord])
 
+    useEffect(() => {
+        setTimeLeft(gameConfig.timeLimit); // Сброс таймера при смене игрока
+        setIsTimerActive(true);
+
+        if (gameConfig.timeLimit === null) return;
+
+        const timerId = setInterval(() => {
+            setTimeLeft(prev => {
+                if (prev <= 1) {
+                    clearInterval(timerId);
+                    handleTimeEnd();
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+
+        return () => clearInterval(timerId);
+    }, [currentPlayerId, gameConfig.timeLimit]);
+
+    const handleTimeEnd = () => {
+        setIsTimerActive(false);
+        // Здесь логика окончания времени
+        console.log('Время вышло!');
+        // Передаем ход следующему игроку
+        const nextPlayerId = (currentPlayerId + 1) % players.length;
+        setCurrentPlayerId(nextPlayerId);
+    };
 
     const handleCellClick = (rowId: number, cellId: number) => {
         if (!boardIsClickable) return
@@ -130,6 +160,14 @@ export const BaldaGame = () => {
 
     return (
         <div className="balda-game">
+            <div className="timer">
+                <h3>Ход игрока {players[currentPlayerId].name}</h3>
+                {gameConfig.timeLimit !== null && (
+                    <div className="time-left">
+                        Осталось: {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
+                    </div>
+                )}
+            </div>
             <div className="player1">
                 <h1>{players[0].name}</h1>
                 {players[0].score}

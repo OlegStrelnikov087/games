@@ -4,20 +4,14 @@ import './balda-setup.css'
 import { BALDA_GAME_TYPE, BaldaGameConfig, BaldaNotTimeLimitForThrow } from "../../applications/balda/types/types";
 import { MAXIMUM_TIME_LIMIT_FOR_THROW, MINIMAL_TIME_LIMIT_FOR_THROW, NOT_TIME_LIMIT_FOR_THROW, STANDART_TIME_LIMIT_FOR_THROW } from "../../applications/balda/utils/balda-const";
 export const BaldaSetup = () => {
-    const location = useLocation()
-    const gameType = location.state
+    const gameType = BALDA_GAME_TYPE.USER_AND_USER
     const [player1Name, setPlayer1Name] = useState<string>("");
     const [player2Name, setPlayer2Name] = useState<string>("");
     const [boardSize, setBoardSize] = useState<3 | 4 | 5 | 6>(5);
     const [timeLimitEnabled, setTimeLimitEnabled] = useState<boolean>(false);
     const [timeLimit, setTimeLimit] = useState<number | BaldaNotTimeLimitForThrow>(STANDART_TIME_LIMIT_FOR_THROW);
     const navigate = useNavigate();
-    useEffect(() => {
-        if (gameType === BALDA_GAME_TYPE.BOT_AND_USER) {
-            setPlayer2Name('Бот');
-        }
-    }, [gameType]);
-
+   
     const handleStartGame = () => {
         const gameConfig: BaldaGameConfig = {
             player1: {name: player1Name, score: 0}, 
@@ -51,7 +45,7 @@ export const BaldaSetup = () => {
                 </div>
             </>
         )}
-        {gameType === BALDA_GAME_TYPE.BOT_AND_USER && (
+        {/* {gameType === BALDA_GAME_TYPE.BOT_AND_USER && (
              <div className="setup-section">
              <label>Игрок:</label>
              <input
@@ -60,7 +54,7 @@ export const BaldaSetup = () => {
                  value={player1Name}
                  onChange={(e) => setPlayer1Name(e.target.value)} />
          </div>
-        )}
+        )} */}
 
         <div className="setup-section">
             <label>Размер поля:</label>

@@ -17,7 +17,7 @@ export const Home = () => {
             <GameCard
             title="Балда"
             description="Лучшая игра на уроке физики в 11 классе"
-            path="/balda-main"
+            path="/balda-setup"
             />
           </div>
         </div>
