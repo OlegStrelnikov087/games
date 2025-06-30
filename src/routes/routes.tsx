@@ -32,10 +32,6 @@ export const router = createBrowserRouter([
         element: <Darts />
       },
       {
-        path: 'balda-main',
-        element: <BaldaMainPage />
-      },
-      {
         path: 'balda-setup',
         element: <BaldaSetup />
       },

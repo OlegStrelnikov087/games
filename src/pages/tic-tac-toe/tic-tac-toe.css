@@ -1,10 +1,9 @@
-.tic-tac-toe-page {
+ .tic-tac-toe-page {
+    display: flex;
+    flex-direction: column;
     width: 100vw;
     height: 99vh;
-    display: flex;
-    justify-content: center;
     align-items: center;
-    flex-direction: column;
 }
 
 header {
@@ -18,4 +17,5 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-}
+} 
+

@@ -1,16 +1,19 @@
 .cell {
-    height: calc(100% / 3);
-    width: calc(100% / 3);
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
+    cursor: pointer;
+    height: calc(100%/3);
+    width: calc(100%/3);  
+    border: none !important;
+    background: transparent;
 }
-
+ 
 .cell > * {
     position: absolute;
     width: 60%;
     height: 60%;
     left: 20%;
     top: 20%;
-}
+} 

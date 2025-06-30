@@ -80,7 +80,7 @@ export const BaldaGame = () => {
     const handleTimeEnd = () => {
         setIsTimerActive(false);
         // Здесь логика окончания времени
-        console.log('Время вышло!');
+        alert('Время вышло!');
         // Передаем ход следующему игроку
         const nextPlayerId = (currentPlayerId + 1) % players.length;
         setCurrentPlayerId(nextPlayerId);
