@@ -19,7 +19,7 @@ export const BaldaBoard = ({ board, size, onCellClick }: BaldaBoardProps) => {
             {board.map((row, rowId) =>
                 row.map((cell, cellId) =>
                 (
-                    <div key={cellId} id={`row${rowId} cell${cellId}`} className="cell" onClick={() => onCellClick(rowId, cellId)}>{cell}</div>
+                    <div key={cellId} id={`row${rowId} cell${cellId}`} className="balda-cell" onClick={() => onCellClick(rowId, cellId)}>{cell}</div>
                 )))}
 
         </div>

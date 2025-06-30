@@ -44,7 +44,7 @@ interface CellProps {
  */
 export const Cell = ({ value, index, onSelect, isLastMove }:CellProps) => {
   return (
-    <div className="cell" onClick={() => onSelect(index, 'click')}>
+    <div className="tic-tac-toe-cell" onClick={() => onSelect(index, 'click')}>
       {value && (
         <Lottie
           animationData={animationData[value]}

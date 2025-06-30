@@ -109,9 +109,9 @@ export const Board  = () => {
   };
 
   return (
-    <div className="boardContainer">
+    <div className="tic-tac-toe-board-container">
       <Lottie animationData={gridAnimation} autoPlay loop={false} />
-      <div className="gameBoard">
+      <div className="tic-tac-toe-game-board">
         {board && board.map((cell, i) => (
           <Cell
             key={i}

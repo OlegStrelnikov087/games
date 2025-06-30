@@ -1,19 +1,16 @@
-.cell {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    height: calc(100%/3);
-    width: calc(100%/3);  
-    border: none !important;
-    background: transparent;
-}
- 
-.cell > * {
-    position: absolute;
-    width: 60%;
-    height: 60%;
-    left: 20%;
-    top: 20%;
-} 
+ .tic-tac-toe-cell {
+     height: calc(100% / 3);
+     width: calc(100% / 3);
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     position: relative;
+ }
+
+ .tic-tac-toe-cell>* {
+     position: absolute;
+     width: 60%;
+     height: 60%;
+     left: 20%;
+     top: 20%;
+ }
