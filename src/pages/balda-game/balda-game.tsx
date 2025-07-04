@@ -4,8 +4,9 @@ import { BaldaKeyboard } from "../../applications/balda/components/balda-keyboar
 import './balda-game.css'
 import { BALDA_GAME_TYPE, BaldaBoardValue, BaldaCellValue, BaldaPlayer } from "../../applications/balda/types/types";
 import { BALDA_EMPTY_CELL_VALUE } from "../../applications/balda/utils/balda-const";
-import { useEffect, useState } from "react";
-
+import { useEffect, useRef, useState } from "react";
+import { BaldaTimer } from "../../applications/balda/components/balda-timer/balda-timer";
+import { BaldaCounter } from "../../applications/balda/components/balda-counter/balda-counter";
 export const BaldaGame = () => {
     const location = useLocation()
     const gameConfig = location.state
@@ -160,24 +161,15 @@ export const BaldaGame = () => {
 
     return (
         <div className="balda-game">
-            <div className="timer">
-                <h3>Ход игрока {players[currentPlayerId].name}</h3>
-                {gameConfig.timeLimit !== null && (
-                    <div className="time-left">
-                        Осталось: {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
-                    </div>
-                )}
-            </div>
-            <div className="player1">
-                <h1>{players[0].name}</h1>
-                {players[0].score}
-            </div>
-            <div className="player2">
-                <h1>{players[1].name}</h1>
-                {players[1].score}
-            </div>
+            <BaldaTimer timeLimit={gameConfig.timeLimit} timeLeft={timeLeft} />
+
+            {players.map((player, playerId) => (
+                <BaldaCounter key={playerId} name={player.name} score={player.score} />
+            )
+            )}
+
             <div className="board-container">
-                <BaldaBoard board={board} size={gameConfig.boardSize} onCellClick={handleCellClick} />
+                <BaldaBoard board={board} size={gameConfig.boardSize} onCellClick={handleCellClick} isGoToSelectCell={goToChoseCell} isGoToSelectWord={goToChoseWord} />
             </div>
             <div className="keyboard-container">
                 <BaldaKeyboard onKeyClick={handleKeyClick} onBackspace={handleBackspaceClick} onEnter={handleEnterClick} />
