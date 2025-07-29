@@ -1,0 +1,22 @@
+.balda-game {
+    width: 100vw;
+    height: 100vh;
+}
+
+.balda-timer {
+    height: 10%;
+    background-color: blue;
+}
+
+.balda-counters-container {
+    height: 10%;
+    background-color: red;
+}
+
+.board-container {
+    height: 55%;
+}
+
+.keyboard-container {
+    height: 25%;
+}

@@ -161,12 +161,16 @@ export const BaldaGame = () => {
 
     return (
         <div className="balda-game">
-            <BaldaTimer timeLimit={gameConfig.timeLimit} timeLeft={timeLeft} />
+            <div className="balda-timer">
+                <BaldaTimer timeLimit={gameConfig.timeLimit} timeLeft={timeLeft} />
+            </div>
 
-            {players.map((player, playerId) => (
-                <BaldaCounter key={playerId} name={player.name} score={player.score} />
-            )
-            )}
+            <div className="balda-counters-container">
+                {players.map((player, playerId) => (
+                    <BaldaCounter key={playerId} name={player.name} score={player.score} />
+                )
+                )}
+            </div>
 
             <div className="board-container">
                 <BaldaBoard board={board} size={gameConfig.boardSize} onCellClick={handleCellClick} isGoToSelectCell={goToChoseCell} isGoToSelectWord={goToChoseWord} />
