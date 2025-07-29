@@ -1,22 +1,47 @@
+
 .balda-game {
-    width: 100vw;
+    display: flex;
+    flex-direction: column;
     height: 100vh;
-}
-
-.balda-timer {
-    height: 10%;
-    background-color: blue;
-}
-
-.balda-counters-container {
-    height: 10%;
-    background-color: red;
-}
-
-.board-container {
-    height: 55%;
-}
-
-.keyboard-container {
-    height: 25%;
-}
+    max-height: -webkit-fill-available; /* Для мобильных браузеров */
+    padding: 12px;
+    box-sizing: border-box;
+    gap: 8px;
+  }
+  
+  .balda-counters-container {
+    display: flex;
+    justify-content: space-around;
+    gap: 8px;
+    flex-wrap: wrap;
+    min-height: min-content;
+  }
+  
+  .balda-timer {
+    min-height: min-content;
+  }
+  
+  .board-container {
+    flex: 1;
+    min-height: 0; /* Важно для корректного сжатия в Firefox */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .keyboard-container {
+    min-height: min-content;
+    margin-top: auto; /* Прижимаем клавиатуру к низу */
+  }
+  
+  /* Оптимизация для очень маленьких экранов */
+  @media (max-height: 600px) {
+    .balda-game {
+      gap: 4px;
+    }
+    
+    .balda-counters-container {
+      flex-direction: column;
+      align-items: center;
+    }
+  }

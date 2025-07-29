@@ -118,7 +118,7 @@ export const BaldaGame = () => {
     const handleEnterClick = () => {
         if (!enterIsClickable) return
         if (goToChoseWord) {
-            if (words.includes(selectedLetters.join('').toLowerCase())) {
+            if (selectedCell!==null && selectedLetters.includes(board[selectedCell[0]][selectedCell[1]]) && words.includes(selectedLetters.join('').toLowerCase()) ) {
                 setGoToChoseWord(false)
                 setBoardIsClickable(true)
                 setEnterIsClickable(false)
